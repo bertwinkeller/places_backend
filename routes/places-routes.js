@@ -9,7 +9,7 @@ const HttpError = require('../models/http-error')
 
 
 
-router.get('/user/:uid', placesControllers.getPlaceByUserId)
+router.get('/user/:uid', placesControllers.getPlacesByUserId)
 
 router.get('/:pid', placesControllers.getPlaceById )
 
