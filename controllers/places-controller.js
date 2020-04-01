@@ -72,6 +72,12 @@ const placeId = req.params.pid
 const updatedPlace = {...dummyPlaces.find(p => p.id === placeId) }
 const placeIndex = dummyPlaces.findIndex(p => p.id === placeId)
 
+updatedPlace.title = title
+updatedPlace.description = description
+
+dummyPlaces[placeIndex] = updatedPlace
+
+res.status(200).json({place: updatedPlace})
 }
 
 const deletePlace = (req, res, next ) => {
