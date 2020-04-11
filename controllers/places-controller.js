@@ -3,7 +3,7 @@ const HttpError = require('../models/http-error')
 
 const uuid = require('uuid/v4')
 const {validationResult} = require('express-validator')
-
+const getCoordinates = require('../utils/location.js')
 
 let dummyPlaces = [
     {
@@ -15,17 +15,6 @@ let dummyPlaces = [
             lng: -73.9871516
         },
         address: '20 W 34th St, New York, NY 10001',
-        creator: 'u1'
-    },
-    {
-        id: 'p2',
-        title: "Wall Street",
-        description: 'Makin Money',
-        location: {
-            lat: 39.99,
-            lng: -75.00
-        },
-        address: ' 234 Wall St, New York, NY 10001',
         creator: 'u1'
     }
 ]
@@ -58,15 +47,22 @@ const getPlacesByUserId = (req, res, next) => {
       res.json({ places });
 }
 
-const createPlace = (req, res, next ) => {
+const createPlace = async (req, res, next ) => {
     const errors = validationResult(req)
     if (!errors.isEmpty()){
         console.log(errors)
-        throw new HttpError('Invalid inputs, check your data', 422)
+        next (new HttpError('Invalid inputs, check your data', 422))
     }
+const {title, description, address, creator} = req.body
 
+let coordinates
+try{
+coordinates = await getCoordinates(address)
+} catch (error){
+    console.log(error)
+   return next(error)
+}
 
-const {title, description, coordinates, address, creator} = req.body
 const createdPlace = {
     id: uuid(),
     title,
@@ -75,7 +71,6 @@ const createdPlace = {
     address,
     creator
 }
-
 dummyPlaces.push(createdPlace)
 
 res.status(201).json({place: createdPlace})
@@ -83,7 +78,6 @@ res.status(201).json({place: createdPlace})
 
 
 const updatePlace = (req, res, next ) => {
-
 
     const errors = validationResult(req)
     if (!errors.isEmpty()){

@@ -7,8 +7,6 @@ const placesControllers = require('../controllers/places-controller')
 const router = express.Router() 
 
 
-
-
 router.get('/user/:uid', placesControllers.getPlacesByUserId)
 
 router.get('/:pid', placesControllers.getPlaceById )
@@ -19,7 +17,7 @@ router.post('/',
 .isEmpty(),
 check('description')
 .isLength({min:5}),
-check('adress')
+check('address')
 .not()
 .isEmpty()
 ], 
