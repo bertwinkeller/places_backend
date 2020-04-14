@@ -4,20 +4,9 @@ const HttpError = require('../models/http-error')
 const uuid = require('uuid/v4')
 const {validationResult} = require('express-validator')
 const getCoordinates = require('../utils/location.js')
+const Place = require('../models/place')
 
-let dummyPlaces = [
-    {
-        id: 'p1',
-        title: "Empire State Building",
-        description: 'One of the most famous skyskrapers in the world',
-        location: {
-            lat: 40.7484474,
-            lng: -73.9871516
-        },
-        address: '20 W 34th St, New York, NY 10001',
-        creator: 'u1'
-    }
-]
+
 
 const getPlaceById = (req, res, next) => {
     const placeID = req.params.pid 
@@ -63,16 +52,22 @@ coordinates = await getCoordinates(address)
    return next(error)
 }
 
-const createdPlace = {
-    id: uuid(),
-    title,
-    description,
-    location: coordinates,
-    address,
-    creator
-}
-dummyPlaces.push(createdPlace)
+const createdPlace = new Place ({
 
+title,
+description,
+address,
+location: coordinates,
+image: 'https://static.amazon.jobs/locations/58/thumbnails/NYC.jpg?1547618123',
+creator
+})
+
+try{
+await createdPlace.save()
+} catch (err){
+    const error = new HttpError('Creating place failed, please try again', 500)
+    return next(error)
+}
 res.status(201).json({place: createdPlace})
 }
 
