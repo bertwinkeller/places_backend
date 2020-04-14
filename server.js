@@ -1,5 +1,6 @@
 const express = require('express')
 const bodyParser = require('body-parser')
+const mongoose = require('mongoose')
 require('dotenv').config() 
 
 const placesRoutes = require('./routes/places-routes')
@@ -10,5 +11,13 @@ app.use(bodyParser.json())
 app.use('/api/places', placesRoutes)
 app.use('/api/users', userRoutes)
 
-app.listen(5000)
+mongoose
+.connect('mongodb://localhost:27017/placesDB', {
+    useCreateIndex: true,
+    useFindAndModify: true,
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  })
+  .then(() => app.listen(5000))
+  .catch(e => console.error(e))
 
