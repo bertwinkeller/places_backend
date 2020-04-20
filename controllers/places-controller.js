@@ -124,16 +124,14 @@ try{
  const error = new HttpError('Something went wrong, could not delete place', 500)
  return next(error)
 }
-
-
 try {
     await place.remove()
 
 }catch(err){
     const error = new HttpError('Something went wrong, could not delete place',
     500)
+    return next(error)
 }
-return next(error)
 res.status(200).json({message: 'Place Deleted'})
 } 
 
