@@ -71,7 +71,7 @@ location: coordinates,
 image: 'https://static.amazon.jobs/locations/58/thumbnails/NYC.jpg?1547618123',
 creator
 })
-
+ 
 try{
 await createdPlace.save()
 } catch (err){
@@ -87,7 +87,8 @@ const updatePlace = async (req, res, next ) => {
     const errors = validationResult(req)
     if (!errors.isEmpty()){
         console.log(errors)
-        throw new HttpError('Invalid inputs, check your data', 422)
+        return next
+        (HttpError('Invalid inputs, check your data', 422))
     }
 
 
