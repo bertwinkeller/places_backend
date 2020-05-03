@@ -9,7 +9,6 @@ const userSchema = new Schema({
     image: {type: String, require: true},
     places: {type: String, required: true},
 
-
 })
 
 userSchema.plugin(uniqueValidator)
