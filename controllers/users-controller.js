@@ -55,7 +55,7 @@ const signUp = async(req, res, next ) =>  {
      )
     }
 
-    const {name, email, password, places} = req.body
+    const {name, email, password} = req.body
 
     let existingUser
     try{
@@ -76,7 +76,7 @@ const signUp = async(req, res, next ) =>  {
         email,
         image: 'https://static.amazon.jobs/locations/58/thumbnails/NYC.jpg?1547618123',
         password,
-        places
+        places: []
     })
 
 

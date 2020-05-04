@@ -12,7 +12,7 @@ app.use('/api/places', placesRoutes)
 app.use('/api/users', userRoutes)
 
 mongoose
-.connect('mongodb://localhost:27017/placesDB', {
+.connect('mongodb+srv://bertwinkeller:Daintydeethegolden15!@placesdb-c9vha.mongodb.net/placesDB?retryWrites=true&w=majority', {
     useCreateIndex: true,
     useFindAndModify: true,
     useNewUrlParser: true,
