@@ -29,22 +29,22 @@ const getPlaceById = async (req, res, next) => {
 
 const getPlacesByUserId = async (req, res, next) => {
     const userID = req.params.uid 
-    let places
+    let userWithPlaces
     try{ 
-        places = await Place.find( {creator: userID})
+        userWithPlaces = await User.findById(userID).populate('places')
     } catch(err){
         const error = new HttpError('Couldnt find place for this user', 500)
         return next(error)
     }
         
 
-    if (!places) {
+    if (!userWithPlaces || userWithPlaces.places.length === 0) {
         return next(
           new HttpError('Could not find places for the provided user id.', 404)
         );
       } 
     
-      res.json({ places: places.map(place => place.toObject({getters: true})) });
+      res.json({ places: userWithPlaces.places.map(place => place.toObject({getters: true})) });
 }
  
 const createPlace = async (req, res, next ) => {
@@ -160,7 +160,7 @@ try {
     place.creator.places.pull(place)
     await place.creator.save({session: sess})
     await sess.commitTransaction()
-    
+
 }catch(err){
     const error = new HttpError('Something went wrong, could not delete place',
     500)
